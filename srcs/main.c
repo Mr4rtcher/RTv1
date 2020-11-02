@@ -6,7 +6,7 @@
 /*   By: jabilbo <jabilbo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 15:02:42 by jabilbo           #+#    #+#             */
-/*   Updated: 2020/11/03 01:31:45 by jabilbo          ###   ########.fr       */
+/*   Updated: 2020/11/03 01:47:35 by jabilbo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,15 +99,16 @@ double			cilindr_stack(t_data *data)
 	double		C;
 	double		discr;
 	t_vector	OC, D, V, CV;
-	double		t1, t2, t;
+	double		t1, t2, t, k;
 
 	CV = v_Sub(&data->cilindr_v, &data->cilindr_c);
 	OC = v_Sub(&data->cilindr_c, &data->camera);
 	D = v_Del(&data->vector_pixel, sqrt(v_Dot(&data->vector_pixel, &data->vector_pixel)));
 	V = v_Del(&CV, sqrt(v_Dot(&CV, &CV)));
-	A = v_Dot(&D, &D) - pow(v_Dot(&D, &V), 2);
-	B = 2 * (v_Dot(&D, &OC) - v_Dot(&D, &V) * v_Dot(&OC, &V));
-    C = v_Dot(&OC, &OC) - pow(v_Dot(&OC, &V), 2) - 5 * 5;
+	k = 5 / sqrt(v_Dot(&CV, &CV));
+	A = v_Dot(&D, &D) - (1 + k * k) * pow(v_Dot(&D, &V), 2);
+	B = 2 * (v_Dot(&D, &OC) - (1 + k * k) * v_Dot(&D, &V) * v_Dot(&OC, &V));
+    C = v_Dot(&OC, &OC) - (1 + k * k) * pow(v_Dot(&OC, &V), 2);
 	discr = B * B - 4 * A * C;
 	if (discr < 0)
 		return (0);
